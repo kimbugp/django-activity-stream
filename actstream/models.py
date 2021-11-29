@@ -24,14 +24,14 @@ class Follow(models.Model):
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, db_index=True
     )
-    object_id = models.CharField(max_length=255, db_index=True)
+    object_id = models.IntegerField(db_index=True)
     follow_object = GenericForeignKey()
     actor_only = models.BooleanField(
         "Only follow actions where "
         "the object is the target.",
         default=True
     )
-    flag = models.CharField(max_length=255, blank=True, db_index=True, default='')
+    flag = models.IntegerField(blank=True, db_index=True)
     started = models.DateTimeField(default=now, db_index=True)
     objects = FollowManager()
 
@@ -75,7 +75,7 @@ class Action(models.Model):
         ContentType, related_name='actor',
         on_delete=models.CASCADE, db_index=True
     )
-    actor_object_id = models.CharField(max_length=255, db_index=True)
+    actor_object_id = models.IntegerField(db_index=True)
     actor = GenericForeignKey('actor_content_type', 'actor_object_id')
 
     verb = models.CharField(max_length=255, db_index=True)
@@ -86,9 +86,7 @@ class Action(models.Model):
         related_name='target',
         on_delete=models.CASCADE, db_index=True
     )
-    target_object_id = models.CharField(
-        max_length=255, blank=True, null=True, db_index=True
-    )
+    target_object_id = models.IntegerField(blank=True, null=True, db_index=True)
     target = GenericForeignKey(
         'target_content_type',
         'target_object_id'
@@ -99,9 +97,7 @@ class Action(models.Model):
         related_name='action_object',
         on_delete=models.CASCADE, db_index=True
     )
-    action_object_object_id = models.CharField(
-        max_length=255, blank=True, null=True, db_index=True
-    )
+    action_object_object_id = models.IntegerField(blank=True, null=True, db_index=True)
     action_object = GenericForeignKey(
         'action_object_content_type',
         'action_object_object_id'
